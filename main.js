@@ -8,75 +8,116 @@ class LottoBall extends HTMLElement {
 
         const wrapper = document.createElement('div');
         wrapper.style.cssText = `
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.8rem;
+            font-size: 1.4rem;
             font-weight: bold;
             color: white;
-            background: radial-gradient(circle at 20px 20px, ${color}, #000);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5), inset 0 -5px 15px rgba(0,0,0,0.8), inset 0 5px 15px rgba(255,255,255,0.1);
+            background: radial-gradient(circle at 15px 15px, ${color}, #000);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5), inset 0 -3px 8px rgba(0,0,0,0.8);
             text-shadow: 0 0 5px rgba(255,255,255,0.5);
+            animation: pop-in 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
         `;
         wrapper.textContent = number;
 
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes pop-in {
+                0% { transform: scale(0); opacity: 0; }
+                100% { transform: scale(1); opacity: 1; }
+            }
+        `;
+
+        shadow.appendChild(style);
         shadow.appendChild(wrapper);
     }
 
     getColor(number) {
-        const colors = [
-            '#e53935', '#d81b60', '#8e24aa', '#5e35b1', '#3949ab',
-            '#1e88e5', '#039be5', '#00acc1', '#00897b', '#43a047',
-            '#7cb342', '#c0ca33', '#fdd835', '#ffb300', '#fb8c00',
-            '#f4511e'
-        ];
-        return colors[Math.floor(Math.random() * colors.length)];
+        if (number <= 10) return '#fbc02d'; // Yellow
+        if (number <= 20) return '#1976d2'; // Blue
+        if (number <= 30) return '#d32f2f'; // Red
+        if (number <= 40) return '#757575'; // Grey
+        return '#388e3c'; // Green
     }
 }
 
 customElements.define('lotto-ball', LottoBall);
 
-// Lotto Generation Logic
-document.getElementById('generator-btn').addEventListener('click', () => {
-    const lottoNumbersContainer = document.getElementById('lotto-numbers-container');
-    lottoNumbersContainer.innerHTML = '';
-    const numbers = new Set();
-
+// Lotto Generation Helper
+function generateSet(baseNumbers = []) {
+    const numbers = new Set(baseNumbers);
     while (numbers.size < 6) {
         numbers.add(Math.floor(Math.random() * 45) + 1);
     }
+    return Array.from(numbers).sort((a, b) => a - b);
+}
 
-    Array.from(numbers).sort((a, b) => a - b).forEach((number, index) => {
+// Random Generation
+document.getElementById('generator-btn').addEventListener('click', () => {
+    const container = document.getElementById('lotto-numbers-container');
+    const recommendContainer = document.getElementById('recommend-container');
+    container.innerHTML = '';
+    recommendContainer.classList.add('hidden');
+    
+    const numbers = generateSet();
+    numbers.forEach((num, i) => {
         setTimeout(() => {
-            const lottoBall = document.createElement('lotto-ball');
-            lottoBall.setAttribute('number', number);
-            lottoNumbersContainer.appendChild(lottoBall);
-        }, index * 200);
+            const ball = document.createElement('lotto-ball');
+            ball.setAttribute('number', num);
+            container.appendChild(ball);
+        }, i * 150);
     });
 });
 
-// Theme Toggle Logic
+// Recommend Generation (Based on 1223th winner: 16, 18, 20, 32, 33, 39)
+const lastWinner = [16, 18, 20, 32, 33, 39];
+
+document.getElementById('recommend-btn').addEventListener('click', () => {
+    const container = document.getElementById('lotto-numbers-container');
+    const recommendContainer = document.getElementById('recommend-container');
+    const recommendList = document.getElementById('recommend-list');
+    
+    container.innerHTML = '';
+    recommendList.innerHTML = '';
+    recommendContainer.classList.remove('hidden');
+
+    for (let i = 0; i < 5; i++) {
+        const row = document.createElement('div');
+        row.className = 'recommend-row';
+        
+        // Pick 2-3 numbers from last winner to "combine"
+        const count = Math.floor(Math.random() * 2) + 2;
+        const shuffled = [...lastWinner].sort(() => 0.5 - Math.random());
+        const base = shuffled.slice(0, count);
+        
+        const set = generateSet(base);
+        set.forEach((num, j) => {
+            setTimeout(() => {
+                const ball = document.createElement('lotto-ball');
+                ball.setAttribute('number', num);
+                row.appendChild(ball);
+            }, (i * 100) + (j * 50));
+        });
+        recommendList.appendChild(row);
+    }
+});
+
+// Theme Toggle
 const themeToggle = document.getElementById('theme-toggle');
 const body = document.body;
 
-// Check for saved theme
-const savedTheme = localStorage.getItem('theme');
-if (savedTheme === 'light') {
+if (localStorage.getItem('theme') === 'light') {
     body.classList.add('light-mode');
     themeToggle.textContent = 'Dark Mode';
 }
 
 themeToggle.addEventListener('click', () => {
     body.classList.toggle('light-mode');
-    
-    if (body.classList.contains('light-mode')) {
-        localStorage.setItem('theme', 'light');
-        themeToggle.textContent = 'Dark Mode';
-    } else {
-        localStorage.setItem('theme', 'dark');
-        themeToggle.textContent = 'Light Mode';
-    }
+    const isLight = body.classList.contains('light-mode');
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    themeToggle.textContent = isLight ? 'Dark Mode' : 'Light Mode';
 });

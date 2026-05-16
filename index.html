@@ -10,8 +10,18 @@
     <div class="container">
         <button id="theme-toggle">Light Mode</button>
         <h1>Lotto Number Generator</h1>
-        <button id="generator-btn">Generate Numbers</button>
+        
+        <div class="main-controls">
+            <button id="generator-btn">Random Numbers</button>
+            <button id="recommend-btn">Winning Based (5 sets)</button>
+        </div>
+
         <div id="lotto-numbers-container"></div>
+        
+        <div id="recommend-container" class="hidden">
+            <h3>Recommended Sets (Based on Last Winner)</h3>
+            <div id="recommend-list"></div>
+        </div>
     </div>
     <script src="main.js"></script>
 </body>
