@@ -1,1 +1,98 @@
-/* Add styles here */
+/* General Styles */
+body {
+    font-family: 'Helvetica Neue', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #1a1a1a;
+    color: #fff;
+    overflow: hidden; /* Hide scrollbars */
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.02) 25%, transparent 25%),
+                      linear-gradient(-45deg, rgba(255, 255, 255, 0.02) 25%, transparent 25%),
+                      linear-gradient(45deg, transparent 75%, rgba(255, 255, 255, 0.02) 75%),
+                      linear-gradient(-45deg, transparent 75%, rgba(255, 255, 255, 0.02) 75%);
+    background-size: 20px 20px;
+    opacity: 0.3;
+    z-index: -1;
+}
+
+/* Container */
+.container {
+    text-align: center;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.5), 0 5px 15px rgba(0,0,0,0.4);
+    backdrop-filter: blur(10px);
+}
+
+h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(255,255,255,0.3), 0 0 20px rgba(255,255,255,0.2);
+}
+
+/* Generator Button */
+#generator-btn {
+    padding: 15px 30px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    margin-bottom: 30px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(145deg, #2c2c2c, #1a1a1a);
+    color: #fff;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5), inset 0 -2px 5px rgba(0,0,0,0.8), inset 0 2px 5px rgba(255,255,255,0.1);
+    transition: all 0.2s ease-in-out;
+}
+
+#generator-btn:hover {
+    background: linear-gradient(145deg, #333, #222);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.7), inset 0 -2px 5px rgba(0,0,0,0.8), inset 0 2px 5px rgba(255,255,255,0.1);
+    transform: translateY(-2px);
+}
+
+#generator-btn:active {
+    transform: translateY(1px);
+     box-shadow: 0 3px 10px rgba(0,0,0,0.6), inset 0 -2px 5px rgba(0,0,0,0.8), inset 0 2px 5px rgba(255,255,255,0.1);
+}
+
+/* Lotto Numbers Container */
+#lotto-numbers-container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+/* Lotto Ball Web Component */
+lotto-ball {
+    --ball-size: 60px;
+    width: var(--ball-size);
+    height: var(--ball-size);
+    animation: pop-in 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+    transform: scale(0);
+    opacity: 0;
+}
+
+@keyframes pop-in {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
