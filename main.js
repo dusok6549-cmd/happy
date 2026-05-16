@@ -39,6 +39,7 @@ class LottoBall extends HTMLElement {
 
 customElements.define('lotto-ball', LottoBall);
 
+// Lotto Generation Logic
 document.getElementById('generator-btn').addEventListener('click', () => {
     const lottoNumbersContainer = document.getElementById('lotto-numbers-container');
     lottoNumbersContainer.innerHTML = '';
@@ -48,11 +49,34 @@ document.getElementById('generator-btn').addEventListener('click', () => {
         numbers.add(Math.floor(Math.random() * 45) + 1);
     }
 
-    Array.from(numbers).forEach((number, index) => {
+    Array.from(numbers).sort((a, b) => a - b).forEach((number, index) => {
         setTimeout(() => {
             const lottoBall = document.createElement('lotto-ball');
             lottoBall.setAttribute('number', number);
             lottoNumbersContainer.appendChild(lottoBall);
-        }, index * 200); // Stagger the animation
+        }, index * 200);
     });
+});
+
+// Theme Toggle Logic
+const themeToggle = document.getElementById('theme-toggle');
+const body = document.body;
+
+// Check for saved theme
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme === 'light') {
+    body.classList.add('light-mode');
+    themeToggle.textContent = 'Dark Mode';
+}
+
+themeToggle.addEventListener('click', () => {
+    body.classList.toggle('light-mode');
+    
+    if (body.classList.contains('light-mode')) {
+        localStorage.setItem('theme', 'light');
+        themeToggle.textContent = 'Dark Mode';
+    } else {
+        localStorage.setItem('theme', 'dark');
+        themeToggle.textContent = 'Light Mode';
+    }
 });

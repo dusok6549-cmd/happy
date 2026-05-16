@@ -1,3 +1,26 @@
+/* Theme Variables */
+:root {
+    --bg-color: #1a1a1a;
+    --text-color: #fff;
+    --container-bg: rgba(0, 0, 0, 0.2);
+    --btn-bg: linear-gradient(145deg, #2c2c2c, #1a1a1a);
+    --btn-hover-bg: linear-gradient(145deg, #333, #222);
+    --shadow-color: rgba(0, 0, 0, 0.5);
+    --text-glow: rgba(255, 255, 255, 0.3);
+    --pattern-opacity: 0.3;
+}
+
+.light-mode {
+    --bg-color: #f0f2f5;
+    --text-color: #333;
+    --container-bg: rgba(255, 255, 255, 0.8);
+    --btn-bg: linear-gradient(145deg, #ffffff, #e6e6e6);
+    --btn-hover-bg: linear-gradient(145deg, #f0f0f0, #dadada);
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --text-glow: rgba(0, 0, 0, 0.1);
+    --pattern-opacity: 0.05;
+}
+
 /* General Styles */
 body {
     font-family: 'Helvetica Neue', sans-serif;
@@ -5,9 +28,10 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: #1a1a1a;
-    color: #fff;
+    background-color: var(--bg-color);
+    color: var(--text-color);
     overflow: hidden; /* Hide scrollbars */
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body::before {
@@ -22,18 +46,21 @@ body::before {
                       linear-gradient(45deg, transparent 75%, rgba(255, 255, 255, 0.02) 75%),
                       linear-gradient(-45deg, transparent 75%, rgba(255, 255, 255, 0.02) 75%);
     background-size: 20px 20px;
-    opacity: 0.3;
+    opacity: var(--pattern-opacity);
     z-index: -1;
+    transition: opacity 0.3s ease;
 }
 
 /* Container */
 .container {
+    position: relative;
     text-align: center;
-    background: rgba(0, 0, 0, 0.2);
+    background: var(--container-bg);
     padding: 40px;
     border-radius: 20px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.5), 0 5px 15px rgba(0,0,0,0.4);
+    box-shadow: 0 15px 35px var(--shadow-color), 0 5px 15px rgba(0,0,0,0.4);
     backdrop-filter: blur(10px);
+    transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
 h1 {
@@ -41,7 +68,28 @@ h1 {
     margin-bottom: 20px;
     font-weight: 700;
     letter-spacing: 2px;
-    text-shadow: 0 0 10px rgba(255,255,255,0.3), 0 0 20px rgba(255,255,255,0.2);
+    text-shadow: 0 0 10px var(--text-glow), 0 0 20px rgba(255,255,255,0.2);
+    transition: text-shadow 0.3s ease;
+}
+
+/* Theme Toggle Button */
+#theme-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: 2px solid var(--text-color);
+    color: var(--text-color);
+    padding: 5px 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+}
+
+#theme-toggle:hover {
+    background: var(--text-color);
+    color: var(--bg-color);
 }
 
 /* Generator Button */
@@ -52,21 +100,21 @@ h1 {
     margin-bottom: 30px;
     border: none;
     border-radius: 10px;
-    background: linear-gradient(145deg, #2c2c2c, #1a1a1a);
-    color: #fff;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5), inset 0 -2px 5px rgba(0,0,0,0.8), inset 0 2px 5px rgba(255,255,255,0.1);
+    background: var(--btn-bg);
+    color: var(--text-color);
+    box-shadow: 0 5px 15px var(--shadow-color), inset 0 -2px 5px rgba(0,0,0,0.8), inset 0 2px 5px rgba(255,255,255,0.1);
     transition: all 0.2s ease-in-out;
 }
 
 #generator-btn:hover {
-    background: linear-gradient(145deg, #333, #222);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.7), inset 0 -2px 5px rgba(0,0,0,0.8), inset 0 2px 5px rgba(255,255,255,0.1);
+    background: var(--btn-hover-bg);
+    box-shadow: 0 8px 20px var(--shadow-color), inset 0 -2px 5px rgba(0,0,0,0.8), inset 0 2px 5px rgba(255,255,255,0.1);
     transform: translateY(-2px);
 }
 
 #generator-btn:active {
     transform: translateY(1px);
-     box-shadow: 0 3px 10px rgba(0,0,0,0.6), inset 0 -2px 5px rgba(0,0,0,0.8), inset 0 2px 5px rgba(255,255,255,0.1);
+     box-shadow: 0 3px 10px var(--shadow-color), inset 0 -2px 5px rgba(0,0,0,0.8), inset 0 2px 5px rgba(255,255,255,0.1);
 }
 
 /* Lotto Numbers Container */
