@@ -162,3 +162,73 @@ lotto-ball {
     width: var(--ball-size);
     height: var(--ball-size);
 }
+
+/* Contact Form Styles */
+.divider {
+    margin: 40px 0;
+    border: 0;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.light-mode .divider {
+    border-top: 1px solid rgba(0,0,0,0.1);
+}
+
+.contact-section {
+    text-align: left;
+    margin-top: 20px;
+}
+
+.contact-section h3 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.form-group input, 
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.05);
+    color: var(--text-color);
+    font-family: inherit;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+.light-mode .form-group input,
+.light-mode .form-group textarea {
+    background: rgba(0,0,0,0.02);
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+.form-group input:focus, 
+.form-group textarea:focus {
+    outline: none;
+    border-color: #ff8c00;
+    background: rgba(255,255,255,0.1);
+}
+
+#submit-btn {
+    width: 100%;
+    background: linear-gradient(145deg, #2c2c2c, #1a1a1a);
+    margin-top: 10px;
+}
+
+#submit-btn:hover {
+    background: #ff8c00;
+    color: #fff;
+}
