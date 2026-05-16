@@ -1,46 +1,63 @@
 class LottoBall extends HTMLElement {
     constructor() {
         super();
-        const shadow = this.attachShadow({ mode: 'open' });
+        this.attachShadow({ mode: 'open' });
+    }
 
+    connectedCallback() {
+        this.render();
+    }
+
+    static get observedAttributes() {
+        return ['number'];
+    }
+
+    attributeChangedCallback() {
+        this.render();
+    }
+
+    render() {
         const number = this.getAttribute('number');
+        if (!number) return;
+
         const color = this.getColor(number);
-
-        const wrapper = document.createElement('div');
-        wrapper.style.cssText = `
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.4rem;
-            font-weight: bold;
-            color: white;
-            background: radial-gradient(circle at 15px 15px, ${color}, #000);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5), inset 0 -3px 8px rgba(0,0,0,0.8);
-            text-shadow: 0 0 5px rgba(255,255,255,0.5);
-            animation: pop-in 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+        this.shadowRoot.innerHTML = `
+            <style>
+                :host {
+                    display: inline-block;
+                    width: 50px;
+                    height: 50px;
+                }
+                .ball {
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 50%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 1.4rem;
+                    font-weight: bold;
+                    color: white;
+                    background: radial-gradient(circle at 15px 15px, ${color}, #000);
+                    box-shadow: 0 4px 10px rgba(0,0,0,0.5), inset 0 -3px 8px rgba(0,0,0,0.8);
+                    text-shadow: 0 0 5px rgba(255,255,255,0.5);
+                    animation: pop-in 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+                }
+                @keyframes pop-in {
+                    0% { transform: scale(0); opacity: 0; }
+                    100% { transform: scale(1); opacity: 1; }
+                }
+            </style>
+            <div class="ball">${number}</div>
         `;
-        wrapper.textContent = number;
-
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes pop-in {
-                0% { transform: scale(0); opacity: 0; }
-                100% { transform: scale(1); opacity: 1; }
-            }
-        `;
-
-        shadow.appendChild(style);
-        shadow.appendChild(wrapper);
     }
 
     getColor(number) {
-        if (number <= 10) return '#fbc02d'; // Yellow
-        if (number <= 20) return '#1976d2'; // Blue
-        if (number <= 30) return '#d32f2f'; // Red
-        if (number <= 40) return '#757575'; // Grey
+        const num = parseInt(number);
+        if (num <= 10) return '#fbc02d'; // Yellow
+        if (num <= 20) return '#1976d2'; // Blue
+        if (num <= 30) return '#d32f2f'; // Red
+        if (num <= 40) return '#757575'; // Grey
         return '#388e3c'; // Green
     }
 }
@@ -89,7 +106,6 @@ document.getElementById('recommend-btn').addEventListener('click', () => {
         const row = document.createElement('div');
         row.className = 'recommend-row';
         
-        // Pick 2-3 numbers from last winner to "combine"
         const count = Math.floor(Math.random() * 2) + 2;
         const shuffled = [...lastWinner].sort(() => 0.5 - Math.random());
         const base = shuffled.slice(0, count);
